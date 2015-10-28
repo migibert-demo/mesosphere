@@ -82,5 +82,5 @@ output "orchestrator" {
 }
 
 output "output" {
-    value = "mesos_primaries: ${openstack_compute_instance_v2.instance-mesos-master-1.network.0.fixed_ip_v4},${openstack_compute_instance_v2.instance-mesos-master-2.network.0.fixed_ip_v4},${openstack_compute_instance_v2.instance-mesos-master-3.network.0.fixed_ip_v4}\nmesos_workers: ${openstack_compute_instance_v2.instance-mesos-private-slave-1.access_ip_v4},${openstack_compute_instance_v2.instance-mesos-private-slave-2.access_ip_v4},${openstack_compute_instance_v2.instance-mesos-private-slave-3.access_ip_v4}"
+    value = "mesosphere-masters: ${openstack_compute_instance_v2.instance-mesos-master-1.network.0.fixed_ip_v4},${openstack_compute_instance_v2.instance-mesos-master-2.network.0.fixed_ip_v4},${openstack_compute_instance_v2.instance-mesos-master-3.network.0.fixed_ip_v4}\nmesosphere-slaves: ${openstack_compute_instance_v2.instance-mesos-private-slave-1.access_ip_v4},${openstack_compute_instance_v2.instance-mesos-private-slave-2.access_ip_v4},${openstack_compute_instance_v2.instance-mesos-private-slave-3.access_ip_v4}"
 }

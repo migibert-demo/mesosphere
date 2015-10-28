@@ -1,0 +1,75 @@
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: Add apt-key
+      apt_key: 
+        id: E56151BF
+        keyserver: keyserver.ubuntu.com
+        state: present
+
+    - name: Add mesosphere repo
+      apt_repository: 
+        repo: "deb http://repos.mesosphere.io/{{ansible_distribution|lower}} {{ansible_distribution_release|lower}} main"
+        state: present
+
+- hosts: mesosphere-masters
+  sudo: yes
+  roles:
+    - { role: mhamrah.java8 }
+  tasks:
+    - name: Install mesosphere
+      apt:
+        name: mesosphere
+        state: present
+        update_cache: yes
+
+- hosts: mesosphere-slaves
+  sudo: yes
+  tasks:
+    - name: Install mesos
+      apt:
+        name: mesos
+        state: present
+        update_cache: yes
+
+- hosts: all
+  vars:
+    zookeeper_port: 2181
+  sudo: yes
+  tasks:
+    - name: configure zookeeper connection
+      template: 
+        src: zookeeper.j2 
+        dest: /etc/mesos/zk
+
+- hosts: mesosphere-masters
+  vars:
+    zookeeper_leader_port: 2888
+    zookeeper_election_port: 3888
+  sudo: yes
+  tasks:
+    - name: configure zookeeper identifier
+      template:
+        src: zookeeper_myid.j2
+        dest: /etc/zookeeper/conf/myid
+    - name: configure zookeeper
+      template:
+        src: zookeeper_configuration.j2
+        dest: /etc/zookeeper/conf/zoo.cfg
+
+- hosts: mesosphere-masters
+  sudo: yes
+  tasks:
+    - name: configure mesos quorum
+      template:
+        src: mesos_quorum.j2
+        dest: /etc/mesos-master/quorum
+    - name: configure mesos ip 
+      template:
+        src: mesos_master_ip.j2
+        dest: /etc/mesos-master/ip
+    - name: configure mesos hostname
+      template:
+        src: mesos_master_hostname.j2
+        dest: /etc/mesos-master/hostname
+

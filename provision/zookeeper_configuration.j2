@@ -1,0 +1,7 @@
+{% set zookeeper_masters = [] %}
+{% for server in groups['mesosphere-masters'] %}
+    {%- if zookeeper_masters.append('server.%s=%s:%s:%s' % (hostvars[server]['zookeeper_id'], server, zookeeper_leader_port, zookeeper_election_port)) %}
+    {%- endif %}
+{% endfor %}
+
+{{ zookeeper_masters | join('\n') }}

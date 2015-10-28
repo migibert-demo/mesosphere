@@ -1,0 +1,3 @@
+{% set cluster_size = groups['mesosphere-masters'] | length %}
+{% set quorum = (cluster_size / 2 + 1) | round(method='floor') | int %}
+{{ quorum }}
