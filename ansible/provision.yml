@@ -1,0 +1,41 @@
+- hosts: localhost
+  sudo: yes
+  tasks:
+  - name: Install debian packages
+    apt: 
+      name: "{{ item }}"
+      force: yes
+      update_cache: yes
+    with_items:
+      - build-essential
+      - python-dev
+      - python-pip    
+      - ruby
+      - git
+
+  - name: Install gems
+    gem: 
+      name: librarian-ansible
+      state: present
+      user_install: no
+
+  - name: Checkout ansible-mesos-playbook repository
+    git:
+      repo: https://github.com/mhamrah/ansible-mesos-playbook.git
+      dest: ansible-mesos-playbook
+
+  - name: Install role dependencies
+    command: librarian-ansible install
+    args:
+      chdir: ansible-mesos-playbook
+
+  - name: Copy ansible.cfg.sample
+    command: cp ansible.cfg.sample ansible.cfg 
+    args:
+      chdir: ansible-mesos-playbook
+
+  - name: Remove default remote_user because root login is disallowed
+    lineinfile: 
+      dest: ansible-mesos-playbook/ansible.cfg 
+      state: absent
+      regexp: "^remote_user"

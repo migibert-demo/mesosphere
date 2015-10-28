@@ -1,0 +1,5 @@
+export OS_AUTH_URL="https://cloud.numergy.com/identity/v2.0"
+export OS_TENANT_NAME="<Your tenant name>"
+export OS_USERNAME="<Your username>"
+export OS_PASSWORD="<Your password>"
+export OS_REGION_NAME=tr2
